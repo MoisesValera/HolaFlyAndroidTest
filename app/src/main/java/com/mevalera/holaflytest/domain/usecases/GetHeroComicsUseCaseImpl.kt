@@ -9,7 +9,6 @@ import javax.inject.Singleton
 @Singleton
 class GetHeroComicsUseCaseImpl @Inject constructor(private val heroComicsRepository: HeroComicsRepository) :
     GetHeroComicsUseCase {
-
     override suspend operator fun invoke(characterId : Int): List<HeroComicsResult> {
         return when (val heroComicsList = heroComicsRepository.getHeroComics(characterId = characterId)) {
             is Result.Success -> {

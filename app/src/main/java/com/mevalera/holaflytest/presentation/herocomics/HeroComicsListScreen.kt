@@ -20,6 +20,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -27,6 +29,7 @@ import coil.compose.AsyncImage
 import com.mevalera.holaflytest.data.models.HeroComicsResult
 import com.mevalera.holaflytest.navigation.HeroesComicsNavigation
 import com.mevalera.holaflytest.presentation.LoadingSpinner
+import com.mevalera.holaflytest.R
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -37,6 +40,7 @@ fun HeroComicsListScreen(
 ) {
     val comicsList by heroesComicsViewModel.selectedHeroComics.collectAsState()
     val loading by heroesComicsViewModel.isSearching.collectAsState()
+    val columnCount = 2
 
     LaunchedEffect(key1 = Unit) {
         heroesComicsViewModel.getHeroComics(comicId)
@@ -44,7 +48,7 @@ fun HeroComicsListScreen(
 
     Column(
         modifier = Modifier
-            .padding(10.dp)
+            .padding(dimensionResource(id = R.dimen.dp_10))
             .fillMaxSize()
     ) {
 
@@ -55,9 +59,9 @@ fun HeroComicsListScreen(
 
             else -> {
                 LazyVerticalStaggeredGrid(
-                    columns = StaggeredGridCells.Fixed(2),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                    columns = StaggeredGridCells.Fixed(columnCount),
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_4)),
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_4))
                 ) {
                     items(
                         comicsList.sortedBy { it.modified },
@@ -74,7 +78,7 @@ fun HeroComicsListScreen(
                     ) {
                         Text(
                             textAlign = TextAlign.Center,
-                            text = "Error when loading hero's comics, please try again later."
+                            text = stringResource(id = R.string.hero_comics_error)
                         )
                     }
                 }
@@ -85,7 +89,7 @@ fun HeroComicsListScreen(
 
 @Composable
 fun HeroComicCard(comicResult: HeroComicsResult, navController: NavController) {
-    Column(modifier = Modifier.padding(5.dp)) {
+    Column(modifier = Modifier.padding(dimensionResource(id = R.dimen.dp_5))) {
         AsyncImage(
             model = comicResult.thumbnail.path + "." + comicResult.thumbnail.extension,
             contentDescription = "",

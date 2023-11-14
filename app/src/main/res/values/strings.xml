@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">HolaFly Test</string>
     <string name="app_bar_title">Marvel Comics</string>
+    <string name="marvel_poster">Marvel Poster</string>
+
+    <string name="captain_america">Captain America</string>
+    <string name="hulk">Hulk</string>
+    <string name="thor">Thor</string>
+    <string name="iron_man">Iron Man</string>
+
+    <string name="hero_comics_error">Error when loading hero\'s comics, please try again later.</string>
+    <string name="comic_error">Error when loading comic, please try again later.</string>
 </resources>

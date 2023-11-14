@@ -21,7 +21,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -38,10 +40,22 @@ fun HeroesScreen(navController: NavController) {
             .background(Color.Black)
             .verticalScroll(rememberScrollState())
     ) {
-        HeroCard(1009220, "Captain America", R.drawable.captain_america, navController, false)
-        HeroCard(1010935, "Iron Man", R.drawable.iron_man, navController, true)
-        HeroCard(1009664, "Thor", R.drawable.thor, navController, false)
-        HeroCard(1011005, "Hulk", R.drawable.hulk, navController, true)
+        HeroCard(
+            1009220,
+            stringResource(id = R.string.captain_america),
+            R.drawable.captain_america,
+            navController,
+            false
+        )
+        HeroCard(
+            1010935,
+            stringResource(id = R.string.iron_man),
+            R.drawable.iron_man,
+            navController,
+            true
+        )
+        HeroCard(1009664, stringResource(id = R.string.thor), R.drawable.thor, navController, false)
+        HeroCard(1011005, stringResource(id = R.string.hulk), R.drawable.hulk, navController, true)
     }
 }
 
@@ -55,12 +69,13 @@ fun HeroCard(
 ) {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
-    val cardHeight = (screenHeight / 4)
+    val columnsNumber = 4
+    val cardHeight = (screenHeight / columnsNumber)
 
     Box(contentAlignment = if (!inverse) Alignment.CenterStart else Alignment.CenterEnd) {
         Image(
             painter = painterResource(id = drawable),
-            contentDescription = "Marvel Poster",
+            contentDescription = stringResource(id = R.string.marvel_poster),
             modifier = Modifier
                 .requiredHeight(cardHeight)
                 .fillMaxWidth()
@@ -86,7 +101,7 @@ fun HeroCard(
                 },
             contentScale = ContentScale.Crop
         )
-        Column(Modifier.padding(10.dp)) {
+        Column(Modifier.padding(dimensionResource(id = R.dimen.dp_10))) {
             Text(text = name, fontSize = 60.sp, fontWeight = FontWeight.Bold, color = Color.White)
         }
     }

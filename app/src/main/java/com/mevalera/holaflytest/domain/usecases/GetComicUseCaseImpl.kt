@@ -9,14 +9,12 @@ import javax.inject.Singleton
 @Singleton
 class GetComicUseCaseImpl @Inject constructor(private val heroComicsRepository: HeroComicsRepository) :
     GetComicUseCase {
-
     override suspend operator fun invoke(comicId: Int): ComicResult? {
         return when (val comicResult = heroComicsRepository.getComic(comicId)) {
             is Result.Success -> {
                 comicResult.data.data.results.filter { it.title != null && it.description != null }
                     .first()
             }
-
             else -> null
         }
     }

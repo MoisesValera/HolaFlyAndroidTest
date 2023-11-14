@@ -13,15 +13,18 @@ interface MarvelAPIService {
     suspend fun getHeroComics(
         @Path("characterId") characterId: Int,
         @Query("ts") ts: String = "1000",
-        @Query("apikey") apiKey: String = "04ebc8f70feb0da64b3b308d0304eeb3",
-        @Query("hash") hash: String = "916b511fb1dbb071cb15f4ff7d4c61a7",
+        @Query("apikey") apiKey: String = API_KEY,
+        @Query("hash") hash: String = HASH,
     ): CharactersResponse
 
     @GET("comics/{comicId}")
     suspend fun getComic(
         @Path("comicId") comicId: Int,
         @Query("ts") ts: String = "1000",
-        @Query("apikey") apiKey: String = "04ebc8f70feb0da64b3b308d0304eeb3",
-        @Query("hash") hash: String = "916b511fb1dbb071cb15f4ff7d4c61a7"
+        @Query("apikey") apiKey: String = API_KEY,
+        @Query("hash") hash: String = HASH
     ): ComicResponse
 }
+
+const val API_KEY = "04ebc8f70feb0da64b3b308d0304eeb3"
+const val HASH = "916b511fb1dbb071cb15f4ff7d4c61a7"

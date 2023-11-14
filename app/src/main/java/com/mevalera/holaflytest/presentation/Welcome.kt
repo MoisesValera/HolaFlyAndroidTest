@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.Shader
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -54,6 +55,50 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun WelcomeScreen(navController: NavController) {
+    val animationScope = rememberCoroutineScope()
+    val animateImage = remember { mutableStateOf(false) }
+    LaunchedEffect(key1 = Unit) {
+        animationScope.launch {
+            delay(200.milliseconds)
+            animateImage.value = true
+        }
+    }
+    val colors = listOf(
+        Color(0xFFBA68C8),
+        Color(0xFF7688FF),
+        Color(0xFF4DD0E1),
+        Color(0xFF7688FF),
+        Color(0xFFBA68C8),
+    )
+
+    val infiniteTransition = rememberInfiniteTransition()
+
+    val offset by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 2000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
+    val brush = remember(offset) {
+        object : ShaderBrush() {
+            override fun createShader(size: Size): Shader {
+                val widthOffset = size.width * offset
+                val heightOffset = size.height * offset
+                return LinearGradientShader(
+                    colors = colors,
+                    from = Offset(widthOffset, heightOffset),
+                    to = Offset(widthOffset + size.width, heightOffset + size.height),
+                    tileMode = TileMode.Mirror
+                )
+            }
+        }
+    }
+
+    val borderWidth = 2.dp
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -64,77 +109,40 @@ fun WelcomeScreen(navController: NavController) {
 
     ) {
         Column(
-            Modifier.fillMaxSize().padding(10.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(dimensionResource(id = R.dimen.dp_10)),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val animationScope = rememberCoroutineScope()
-            val animateImage = remember { mutableStateOf(false) }
-            LaunchedEffect(key1 = Unit) {
-                animationScope.launch {
-                    delay(200.milliseconds)
-                    animateImage.value = true
-                }
-            }
-            val colors = listOf(
-                Color(0xFFBA68C8),
-                Color(0xFF7688FF),
-                Color(0xFF4DD0E1),
-                Color(0xFF7688FF),
-                Color(0xFFBA68C8),
-            )
-
-            val infiniteTransition = rememberInfiniteTransition()
-
-            val offset by infiniteTransition.animateFloat(
-                initialValue = 0f,
-                targetValue = 1f,
-                animationSpec = infiniteRepeatable(
-                    animation = tween(durationMillis = 2000, easing = LinearEasing),
-                    repeatMode = RepeatMode.Reverse
-                )
-            )
-
-            val brush = remember(offset) {
-                object : ShaderBrush() {
-                    override fun createShader(size: Size): Shader {
-                        val widthOffset = size.width * offset
-                        val heightOffset = size.height * offset
-                        return LinearGradientShader(
-                            colors = colors,
-                            from = Offset(widthOffset, heightOffset),
-                            to = Offset(widthOffset + size.width, heightOffset + size.height),
-                            tileMode = TileMode.Mirror
-                        )
-                    }
-                }
-            }
-
-            val borderWidth = 2.dp
-
             IconButton(
                 modifier = Modifier
                     .clip(CircleShape)
                     .border(
                         BorderStroke(borderWidth, brush), CircleShape
                     )
-                    .padding(20.dp),
+                    .padding(dimensionResource(id = R.dimen.dp_20)),
                 onClick = {
                     navController.navigate(HeroesComicsNavigation.HeroesList.route)
                 }
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = "Tap to View Heroes", fontSize = 30.sp, color = Color.White, fontWeight = FontWeight.Bold)
-                    Spacer(modifier = Modifier.width(width = 8.dp))
+                    Text(
+                        text = "Tap to View Heroes",
+                        fontSize = 30.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.width(width = dimensionResource(id = R.dimen.dp_8)))
                     Icon(
-                        modifier = Modifier.size(30.dp),
+                        modifier = Modifier.size(dimensionResource(id = R.dimen.dp_30)),
                         imageVector = Icons.Default.ArrowForward,
                         contentDescription = "Icon Forward",
                         tint = Color.White
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_20)))
         }
     }
 }

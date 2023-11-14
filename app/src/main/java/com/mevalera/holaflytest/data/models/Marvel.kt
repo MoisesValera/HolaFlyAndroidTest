@@ -3,7 +3,7 @@ package com.mevalera.holaflytest.data.models
 data class HeroComicsResult(
     val id: Int,
     val title: String? = "",
-    val description: String? = "No description available",
+    val description: String? = NO_DESCRIPTION,
     val thumbnail: Thumbnail,
     val modified: String
 )
@@ -11,7 +11,7 @@ data class HeroComicsResult(
 data class ComicResult(
     val id: Int,
     val title: String? = "",
-    val description: String? = "No description available",
+    val description: String? = NO_DESCRIPTION,
     val thumbnail: Thumbnail,
 )
 
@@ -39,3 +39,5 @@ data class ComicResponse(
     val status: String,
     val data: ComicData,
 )
+
+const val NO_DESCRIPTION = "No description available"

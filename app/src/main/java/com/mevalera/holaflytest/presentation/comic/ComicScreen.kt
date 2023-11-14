@@ -27,12 +27,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.mevalera.holaflytest.R
 import com.mevalera.holaflytest.presentation.LoadingSpinner
 import com.mevalera.holaflytest.presentation.herocomics.HeroComicsViewModel
 
@@ -44,6 +46,8 @@ fun ComicScreen(
     val comic by heroesComicsViewModel.comic.collectAsState()
     val loading by heroesComicsViewModel.isSearching.collectAsState()
     val showMore = remember { mutableStateOf(false) }
+    val maxLines = 3
+    val animationDuration = 500
 
     LaunchedEffect(key1 = Unit) {
         heroesComicsViewModel.getComic(characterId)
@@ -64,10 +68,9 @@ fun ComicScreen(
                 ) {
                     AsyncImage(
                         model = validComic.thumbnail.path + "." + validComic.thumbnail.extension,
-                        contentDescription = "Marvel Poster",
+                        contentDescription = stringResource(id = R.string.marvel_poster),
                         modifier = Modifier
-                            .height(800.dp)
-                            .requiredHeight(800.dp)
+                            .requiredHeight(dimensionResource(id = R.dimen.dp_800))
                             .fillMaxWidth()
                             .graphicsLayer { alpha = 0.99f }
                             .drawWithContent {
@@ -86,7 +89,7 @@ fun ComicScreen(
                     )
                     Column(
                         Modifier
-                            .padding(20.dp)
+                            .padding(dimensionResource(id = R.dimen.dp_20))
                             .align(Alignment.BottomCenter)
                     ) {
                         Text(
@@ -95,9 +98,9 @@ fun ComicScreen(
                             fontWeight = FontWeight.Bold,
                             color = Color.White
                         )
-                        Spacer(modifier = Modifier.height(5.dp))
+                        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_5)))
                         Column(modifier = Modifier
-                            .animateContentSize(animationSpec = tween(100))
+                            .animateContentSize(animationSpec = tween(animationDuration))
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null
@@ -114,7 +117,7 @@ fun ComicScreen(
                                     text = validComic.description.toString(),
                                     fontSize = 18.sp,
                                     color = Color.White,
-                                    maxLines = 3,
+                                    maxLines = maxLines,
                                     overflow = TextOverflow.Ellipsis
                                 )
                             }
@@ -131,7 +134,7 @@ fun ComicScreen(
                 ) {
                     Text(
                         textAlign = TextAlign.Center,
-                        text = "Error when loading comic, please try again later."
+                        text = stringResource(id = R.string.comic_error)
                     )
                 }
             }
